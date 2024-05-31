@@ -83,6 +83,9 @@ def g_LJQ_1(xm: arb, xM: arb, ym: arb, yM: arb, b: arb) -> arb:
 def g_LJQ_1_b0(*p): return g_LJQ_1(*p, b=b0)
 def g_LJQ_1_bh(*p): return g_LJQ_1(*p, b=arb(.5))
 
+def g_LJQ_2(ym: arb, yM: arb, bm: arb, bM: arb) -> arb:
+    return ym - arb(1/16) + (2**bm-1)*Jm(ym, yM)+L(arb(1/16), bm) - 2*Q(yM/2+arb(1/32), bM)
+
 # Case QJQ
 
 def g_QJQ(xm: arb, xM: arb, ym: arb, yM: arb, b: arb) -> arb:
@@ -144,7 +147,8 @@ def verify_all():
     ])
     batch_verify("case LJQ", [
         lambda: verify_positive(g_LJQ_1_b0, (arb(1/16), arb(1/4)), (arb(1/2), arb(3/4))),
-        lambda: verify_positive(g_LJQ_1_bh, (arb(1/16), arb(1/4)), (arb(1/2), arb(3/4)))
+        lambda: verify_positive(g_LJQ_1_bh, (arb(1/16), arb(1/4)), (arb(1/2), arb(3/4))),
+        lambda: verify_positive(g_LJQ_2, (arb(1/2), arb(3/4)), (arb(1/2), arb(1)))
     ])
     batch_verify("case QJQ", [
         lambda: verify_positive(g_QJQ_b1, (arb(1/4), arb(1/2)), (arb(1/2), arb(3/4))),

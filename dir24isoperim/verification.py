@@ -1,6 +1,6 @@
 from flint import arb
 
-from .general import b0, c0, w0, x0, L, Q, DQ, J, DJ, alpha0, alpha1, \
+from .general import b0, b1, c0, w0, x0, L, Q, DQ, J, DJ, alpha0, alpha1, \
                     part_rect, part_intvl, min_val_intvl, min_val_rect
 
 from .util import Log, log, FMT_FAIL, FMT_PASS
@@ -88,7 +88,7 @@ def g_LJQ_1_bh(*p): return g_LJQ_1(*p, b=arb(.5))
 def g_QJQ(xm: arb, xM: arb, ym: arb, yM: arb, b: arb) -> arb:
     return ym - xM + J(ym)*DJ(ym) - (2*Q((xm+yM)/2, b) - Q(xm, b))*DQ((xm+ym)/2, b)
 
-def g_QJQ_b0(*p): return g_QJQ(*p, b=b0)
+def g_QJQ_b1(*p): return g_QJQ(*p, b=b1)
 def g_QJQ_bh(*p): return g_QJQ(*p, b=arb(.5))
 
 # Verification
@@ -147,7 +147,7 @@ def verify_all():
         lambda: verify_positive(g_LJQ_1_bh, (arb(1/16), arb(1/4)), (arb(1/2), arb(3/4)))
     ])
     batch_verify("case QJQ", [
-        lambda: verify_positive(g_QJQ_b0, (arb(1/4), arb(1/2)), (arb(1/2), arb(3/4))),
+        lambda: verify_positive(g_QJQ_b1, (arb(1/4), arb(1/2)), (arb(1/2), arb(3/4))),
         lambda: verify_positive(g_QJQ_bh, (arb(1/4), arb(1/2)), (arb(1/2), arb(3/4)))
     ])
     

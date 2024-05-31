@@ -1,8 +1,5 @@
 from flint import arb
 
-# def J(x: arb, w: arb) -> arb:
-#     '''Rescaled Gaussian isoperimetric profile.'''
-
 def G1(x, y, B, b):
     '''Function :math:`G^1_b[B](x,y)`
 
@@ -142,6 +139,7 @@ def min_val_intvl(g, intvls):
 #         return arb(float(sympy.erfinv(x)), rad=1E-15) # Should be fine but need to check
 
 b0 = 0.5+arb("19/32768")
+b1 = 0.5+arb("31/1024")
 c0 = 1-arb("3/1024")
 
 def L(x: arb, b: arb) -> arb:

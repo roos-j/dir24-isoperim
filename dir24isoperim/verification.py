@@ -94,6 +94,23 @@ def g_QJQ(xm: arb, xM: arb, ym: arb, yM: arb, b: arb) -> arb:
 def g_QJQ_b1(*p): return g_QJQ(*p, b=b1)
 def g_QJQ_bh(*p): return g_QJQ(*p, b=arb(.5))
 
+# Case QJ
+
+def g_QJ_1(xm: arb, xM: arb, ym: arb, yM: arb, b: arb, c: arb) -> arb:
+    rv = (ym-xM)**(1/b-1)
+    if xM < x0:
+        rv += c**(1/b)*(2*Jm((xm+ym)/2, (xM+yM)/2)-Q(xM,b))**(1/b-1)*DJ((xM+yM)/2)
+    else:
+        rv -= c**(1/b)*(2*JM((xm+ym)/2, (xM+yM)/2)-Q(xm,b))**(1/b-1)*absDJM((xm+ym)/2, (xM+yM)/2)
+    rv -= c**(1/b)*(2*JM((xm+ym)/2, (xM+yM)/2)-Q(xm,b))**(1/b-1)*DQ(xm, b)
+    return rv
+
+def g_QJ_1_b0(*p): return g_QJ_1(*p, b=b0, c=1)
+def g_QJ_1_bh(*p): return g_QJ_1(*p, b=arb(.5), c=c0)
+
+def g_QJ_2(xm: arb, xM: arb, ym: arb, yM: arb) -> arb:
+    return ((ym - xM)**2 + J(yM)**2)**.5 + Q(xm,arb(.5)) - 2*JM((xm+ym)/2, (xM+yM)/2)
+
 # Verification
 
 def verify(v):
@@ -153,6 +170,11 @@ def verify_all():
     batch_verify("case QJQ", [
         lambda: verify_positive(g_QJQ_b1, (arb(1/4), arb(1/2)), (arb(1/2), arb(3/4))),
         lambda: verify_positive(g_QJQ_bh, (arb(1/4), arb(1/2)), (arb(1/2), arb(3/4)))
+    ])
+    batch_verify("case QJ", [
+        lambda: verify_positive(g_QJ_1_b0, (arb(1/4), arb(1/2)), (arb(1/2), arb(5/8))),
+        lambda: verify_positive(g_QJ_1_bh, (arb(1/4), arb(1/2)), (arb(1/2), arb(5/8))),
+        lambda: verify_positive(g_QJ_2, (arb(1/4), arb(1/2)), (arb(5/8), arb(1)))
     ])
     
 

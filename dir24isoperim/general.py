@@ -124,11 +124,11 @@ def part_intvl(g, x, depth=0, maxDepth=12):
 
 def min_val_rect(g, rects):
     '''Return minimum value of g on given partition of rectangles.'''
-    return min([g(*x, *y) for (x,y) in rects])
+    return min([g(*x, *y) for (x,y) in rects]).lower()
 
 def min_val_intvl(g, intvls):
     '''Return minimum value of g on given partition of intervals.'''
-    return min([g(intvls[i], intvls[i+1]) for i in range(len(intvls)-1)])
+    return min([g(intvls[i], intvls[i+1]) for i in range(len(intvls)-1)]).lower()
 
 # def fake_erfinv(x):
 #     '''Shouldn't be used.'''
@@ -138,9 +138,10 @@ def min_val_intvl(g, intvls):
 #     else:
 #         return arb(float(sympy.erfinv(x)), rad=1E-15) # Should be fine but need to check
 
-b0 = 0.5+arb("19/32768")
+b0 = 0.5+arb("19/32768")+arb(0,1.7E-7)
 b1 = 0.5+arb("31/1024")
-c0 = 1-arb("3/1024")
+c0 = arb("0.997")
+c1 = arb("0.77")
 
 def L(x: arb, b: arb) -> arb:
     '''Logarithmic function :math:`L_b(x)`'''

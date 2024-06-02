@@ -1,6 +1,6 @@
 from flint import arb
 
-from .general import b0, b1, c0, w0, x0, L, Q, DQ, J, DJ, alpha0, alpha1, \
+from .general import b0, b1, c0, c1, w0, x0, L, Q, DQ, J, DJ, alpha0, alpha1, \
                     part_rect, part_intvl, min_val_intvl, min_val_rect
 
 from .util import Log, log, FMT_FAIL, FMT_PASS
@@ -111,6 +111,29 @@ def g_QJ_1_bh(*p): return g_QJ_1(*p, b=arb(.5), c=c0)
 def g_QJ_2(xm: arb, xM: arb, ym: arb, yM: arb) -> arb:
     return ((ym - xM)**2 + J(yM)**2)**.5 + Q(xm,arb(.5)) - 2*JM((xm+ym)/2, (xM+yM)/2)
 
+# Poincare
+
+def g_P_1(x: arb) -> arb:
+    return 2**(-2*b0)*(arb.log(1/x)/arb.log(arb(2)))**.5+2**(-2*b0)*2**arb(.5)*c1*arb.log(w0/x)**.5-2
+
+def g_P_1_at1_32() -> arb:
+    return g_P_1(arb(1/32)) > 0
+
+def g_P_2(xm: arb, xM: arb) -> arb:
+    return 2**(-2*b0)*(L(xm, arb(.5))+J(1-xm))-2*xM*(1-xm)
+
+def g_P_3(xm: arb, xM: arb) -> arb:
+    rv = -.5*DQ(xm, arb(.5))
+    if 1-xm < x0:
+        rv += 2**(-2*b0)*DJ(1-xm)
+    else:
+        rv -= .5*absDJM(1-xM, 1-xm)
+    rv += xm**(2*b0-1)*(1-xM)
+    rv -= xM
+    rv += (1-xM)**(2*b0)
+    rv -= 2*b0*xM
+    return rv
+
 # Verification
 
 def verify(v):
@@ -175,6 +198,11 @@ def verify_all():
         lambda: verify_positive(g_QJ_1_b0, (arb(1/4), arb(1/2)), (arb(1/2), arb(5/8))),
         lambda: verify_positive(g_QJ_1_bh, (arb(1/4), arb(1/2)), (arb(1/2), arb(5/8))),
         lambda: verify_positive(g_QJ_2, (arb(1/4), arb(1/2)), (arb(5/8), arb(1)))
+    ])
+    batch_verify("Poincare", [
+        lambda: verify(g_P_1_at1_32),
+        lambda: verify_positive(g_P_2, (arb(1/32), arb(1/4))),
+        lambda: verify_positive(g_P_3, (arb(1/4), arb(1/2)))
     ])
     
 

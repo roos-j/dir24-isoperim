@@ -20,11 +20,11 @@ def G(x, y, B, b):
 
 def left(i): 
     '''Left half of interval.'''
-    return (i[0], (i[0]+i[1])/2)
+    return (i[0], (.5*(i[0]+i[1])).upper())
 
 def right(i): 
     '''Right half of interval.'''
-    return ((i[0]+i[1])/2, i[1])
+    return ((.5*(i[0]+i[1])).lower(), i[1])
 
 def intvl_exact(x):
     return x[0].is_exact() and x[1].is_exact()
@@ -130,18 +130,17 @@ def min_val_intvl(g, intvls):
     '''Return minimum value of g on given partition of intervals.'''
     return min([g(intvls[i], intvls[i+1]) for i in range(len(intvls)-1)]).lower()
 
-# def fake_erfinv(x):
-#     '''Shouldn't be used.'''
-#     if x < -1 or x > 1: return arb("nan")
-#     elif x == 1: return arb("inf")
-#     elif x == -1: return arb("-inf")
-#     else:
-#         return arb(float(sympy.erfinv(x)), rad=1E-15) # Should be fine but need to check
+def tuple_to_arb(x):
+    '''Convert interval in tuple format to an arb.'''
+    return arb((x[0]+x[1])/2, (x[1]-x[0])/2)
 
-b0 = 0.5+arb("19/32768")+arb(0,1.7E-7)
+def arb_to_tuple(x):
+    '''Convert an arb to an interval as a tuple.'''
+    return (x.lower(), x.upper())
+
+b0 = arb(.50057) # 0.5+arb("37/65536")
 b1 = 0.5+arb("31/1024")
-c0 = arb("0.997")
-c1 = arb("0.77")
+c0 = arb("0.997") # 1.-arb("3/1024")
 
 def L(x: arb, b: arb) -> arb:
     '''Logarithmic function :math:`L_b(x)`'''

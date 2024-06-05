@@ -18,4 +18,4 @@ if __name__ == "__main__":
     c = arb(args.c)
     print("beta0 = %s"%beta)
     print("c0 = %s"%c)
-    verify_all(args.beta, args.c)
+    verify_all(beta, c)

@@ -1,6 +1,6 @@
 from flint import arb
 
-from .general import b0, b1, c0, w0, x0, L, Q, DQ, J, DJ, G, alpha0, alpha1, \
+from .general import b0, b1, c0, Jconst, L, Q, DQ, J, DJ, G, alpha0, alpha1, \
                     part_rect, part_intvl, min_val_intvl, min_val_rect
 
 from .util import Log, log, FMT_FAIL, FMT_PASS, err, warn
@@ -16,13 +16,13 @@ def Jm(xm: arb, xM: arb) -> arb:
     return arb.min(J(xm), J(xM))
 
 def JM(xm: arb, xM: arb) -> arb:
-    if xM < x0: return J(xM)
-    elif xm > x0: return J(xm)
-    else: return J(x0)
+    if xM < Jconst.x0: return J(xM)
+    elif xm > Jconst.x0: return J(xm)
+    else: return J(Jconst.x0)
 
 def absDJm(xm: arb, xM: arb) -> arb:
-    if xM < x0: return DJ(xM)
-    elif xm > x0: return -DJ(xm)
+    if xM < Jconst.x0: return DJ(xM)
+    elif xm > Jconst.x0: return -DJ(xm)
     else: return arb(0)
 
 def absDJM(xm: arb, xM: arb) -> arb:
@@ -32,7 +32,7 @@ def g_J_1(xm: arb, xM: arb, hm: arb, hM: arb, b: arb, c: arb) -> arb:
     rv = b*c**(1-1/b)*JM(xm+hm, xM+hM)**(1-1/b)
     rv -= .5*b*(1-b)*c**(1-2/b)*Jm(xm+hm, xM+hM)**(1-2/b)*hM**(1/b)
     rv -= c/2*Jm(xm, xM)**(-1)*hM**(2-1/b)
-    if xM < x0:
+    if xM < Jconst.x0:
         rv += c/4*DJ(xM)*J(xM)**(-2)*hm**(3-1/b)
         rv += c/32*DJ(xM)*(7+3*DJ(xM)**2)*J(xM)**(-4)*hm**(5-1/b)
     else: # *not* equivalent to xM >= x0 since x0 is not exact
@@ -85,7 +85,7 @@ def g_QJQ(xm: arb, xM: arb, ym: arb, yM: arb, b: arb) -> arb:
 
 def g_QJ_1(xm: arb, xM: arb, ym: arb, yM: arb, b: arb, c: arb) -> arb:
     rv = (ym-xM)**(1/b-1)
-    if xM < x0:
+    if xM < Jconst.x0:
         rv += c**(1/b)*(2*Jm((xm+ym)/2, (xM+yM)/2)-Q(xM,b))**(1/b-1)*DJ((xM+yM)/2)
     else:
         rv -= c**(1/b)*(2*JM((xm+ym)/2, (xM+yM)/2)-Q(xm,b))**(1/b-1)*absDJM((xm+ym)/2, (xM+yM)/2)
@@ -98,7 +98,7 @@ def g_QJ_2(xm: arb, xM: arb, ym: arb, yM: arb) -> arb:
 # Poincare
 
 def g_P_1(x: arb, b: arb=b1) -> arb:
-    return 2**(-2*b)*(arb.log(1/x)/arb.log(arb(2)))**.5+2**(-2*b)*2**arb(.5)*arb(.77)*arb.log(w0/x)**.5-2
+    return 2**(-2*b)*(arb.log(1/x)/arb.log(arb(2)))**.5+2**(-2*b)*2**arb(.5)*arb(.77)*arb.log(Jconst.w0/x)**.5-2
 
 def g_P_1_at1_32() -> arb:
     return g_P_1(arb(1/32)) > 0
@@ -109,7 +109,7 @@ def g_P_2(xm: arb, xM: arb, b: arb=b0P) -> arb:
 
 def g_P_3(xm: arb, xM: arb, b: arb=b0P) -> arb:
     rv = -.5*DQ(xm, arb(.5))
-    if 1-xm < x0:
+    if 1-xm < Jconst.x0:
         rv += 2**(-2*b)*DJ(1-xm)
     else:
         rv -= .5*absDJM(1-xM, 1-xm)

@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from dir24isoperim import verify_all, b0, b1, c0
+from dir24isoperim import verify_all, b0, b1, c0, init_prec
 from flint import arb, ctx
 
 if __name__ == "__main__":
@@ -12,7 +12,8 @@ if __name__ == "__main__":
                         help="Working precision in bits (default: %d)"%ctx.prec)
     args = parser.parse_args()
     
-    ctx.prec = args.prec
+    #ctx.prec = args.prec
+    init_prec(args.prec)
     print("Working precision: %d"%ctx.prec)
     beta = arb(args.beta)
     c = arb(args.c)

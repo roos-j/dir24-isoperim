@@ -1,4 +1,4 @@
-from flint import arb
+from flint import arb, ctx
 
 def G1(x, y, B, b):
     '''Function :math:`G^1_b[B](x,y)`
@@ -138,6 +138,7 @@ def arb_to_tuple(x):
     '''Convert an arb to an interval as a tuple.'''
     return (x.lower(), x.upper())
 
+# Default values of constants
 b0 = arb(.50057) # 0.5+arb("37/65536")
 b1 = 0.5+arb("31/1024")
 c0 = arb("0.997") # 1.-arb("3/1024")
@@ -177,13 +178,25 @@ def Jw(x: arb, w: arb) -> arb:
     '''Rescaled Gaussian isoperimetric profile'''
     return arb(2)**.5*arb(w)*bobkovI((1-arb(x))/arb(w))
 
-w0 = find_root(lambda w: Jw(arb(.5), w)-.5, (arb(.75), arb(1)))
-x0 = 1-w0/2
+# w0 = find_root(lambda w: Jw(arb(.5), w)-.5, (arb(.75), arb(1)))
+# x0 = 1-w0/2
+
+class Jconst: pass 
+
+def init_prec(prec = 53):
+    '''Set precision in `flint.ctx` and initialize `w0, x0`'''
+    ctx.prec = prec
+    Jconst.w0 = find_root(lambda w: Jw(arb(.5), w)-.5, (arb(.75), arb(1)))
+    Jconst.x0 = 1-Jconst.w0/2
+    print("Initialized to prec=%d"%prec)
+    print("w0=%s"%Jconst.w0)
 
 def J(x: arb) -> arb:
     '''Specific rescaling that we use'''
-    return Jw(x, w0)
+    return Jw(x, Jconst.w0)
 
 def DJ(x: arb) -> arb:
     '''Derivative of J'''
-    return arb(2)**.5*PhiInv((1-x)/w0)
+    return arb(2)**.5*PhiInv((1-x)/Jconst.w0)
+
+init_prec()

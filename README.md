@@ -77,6 +77,10 @@ To verify all computer-assisted claims in the paper use
 
     python run.py --beta 0.50057 --c 0.997
 
+To save partition data to file use
+
+    python run.py --filename partitions.py
+
 To view all command line options run
 
     python run.py -h

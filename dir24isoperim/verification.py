@@ -3,7 +3,7 @@ from flint import arb
 from .general import b0, b1, c0, Jconst, L, Q, DQ, J, DJ, G, alpha0, alpha1, \
                     part_rect, part_intvl, min_val_intvl, min_val_rect
 
-from .util import Log, log, FMT_FAIL, FMT_PASS, err, warn
+from .util import Log, log, FMT_FAIL, FMT_PASS, err, warn, Output
 
 #
 #  Define functions for verification
@@ -144,14 +144,19 @@ def verify_positive(g, x, y=None, maxDepth=12, verbose=1, **args):
     if y == None: 
         success, part = part_intvl(G, x, maxDepth=maxDepth) 
         if success:
+            cmt = "%d intervals, min. val = %s"%(len(part)-1, min_val_intvl(G, part))
+            Output.get_instance().write_part(g.__name__, part, cmt)
             if verbose: 
                 log(FMT_PASS%"ok", indent=0)
-                log("   %d intervals, min. val = %s"%(len(part)-1, min_val_intvl(G, part)))
+                log("   %s"%cmt)
     else: 
         success, part = part_rect(G, x, y, maxDepth=maxDepth)
-        if success and verbose:
-            log(FMT_PASS%"ok", indent=0)
-            log("   %d rectangles, min. val = %s"%(len(part), min_val_rect(G, part)))
+        if success:
+            cmt = "%d rectangles, min. val = %s"%(len(part), min_val_rect(G, part))
+            Output.get_instance().write_part(g.__name__, part, cmt)
+            if verbose:
+                log(FMT_PASS%"ok", indent=0)
+                log("   %s"%cmt)
     if not success and verbose:
         log(FMT_FAIL%"fail", indent=0)
         log("   at %s"%part)
@@ -165,6 +170,7 @@ def batch_verify(label, methods, verbose=1):
     Log.lvl = 0
 
 def verify_all(b0=b0, c0=c0):
+    Output.get_instance().write("# Partition data for beta0=%s, c0=%s\n\n"%(repr(b0), repr(c0)))
     if not (arb(.5) <= b0 <= 1):
         err("b0 must lie in [0.5, 1]")
         return

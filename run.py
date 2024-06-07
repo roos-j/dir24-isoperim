@@ -1,5 +1,5 @@
 from argparse import ArgumentParser
-from dir24isoperim import verify_all, b0, b1, c0, init_prec
+from dir24isoperim import verify_all, b0, b1, c0, init_prec, Output
 from flint import arb, ctx
 
 if __name__ == "__main__":
@@ -10,6 +10,8 @@ if __name__ == "__main__":
                         help="Value for c0; should be in [0,1] (default: %f)"%float(c0))
     parser.add_argument("--prec", type=int, default=ctx.prec, dest="prec",
                         help="Working precision in bits (default: %d)"%ctx.prec)
+    parser.add_argument("--filename", type=str, default="", dest="filename", 
+                        help="Write partition data to a file.")
     args = parser.parse_args()
     
     #ctx.prec = args.prec
@@ -19,4 +21,10 @@ if __name__ == "__main__":
     c = arb(args.c)
     print("beta0 = %s"%beta)
     print("c0 = %s"%c)
+    if args.filename: 
+        if Output.get_instance().open(args.filename):
+            print("Partition data will be written to '%s'"%args.filename)
+
     verify_all(beta, c)
+
+    Output.get_instance().close() 

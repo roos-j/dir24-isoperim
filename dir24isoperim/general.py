@@ -188,8 +188,8 @@ def init_prec(prec = 53):
     ctx.prec = prec
     Jconst.w0 = find_root(lambda w: Jw(arb(.5), w)-.5, (arb(.75), arb(1)))
     Jconst.x0 = 1-Jconst.w0/2
-    print("Initialized to prec=%d"%prec)
-    print("w0=%s"%Jconst.w0)
+    # print("Initialized to prec=%d"%prec)
+    # print("w0=%s"%Jconst.w0)
 
 def J(x: arb) -> arb:
     '''Specific rescaling that we use'''

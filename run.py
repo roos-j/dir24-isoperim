@@ -1,42 +1,44 @@
+'''Run this file using 
+    python run.py
+'''
+
 import sys
 from argparse import ArgumentParser, SUPPRESS
-from dir24isoperim import verify_all, b0, b1, c0, init_prec, Output, parse_aux, write_labels
 from flint import arb, ctx
+from dir24isoperim import verify_all, b0, b1, c0, init_prec, Output, parse_aux, write_labels
 
 if __name__ == "__main__":
     parser = ArgumentParser(description="Verify estimates in DIR24.")
     parser.add_argument("--beta", type=str, default=b0, dest="beta",
-                        help="Value for beta0; should be in [0.5, %.3f] (default: %f)"%(float(b1),float(b0)))
+                help=f"Value for beta0; should be in [0.5, {float(b1):f}] (default: {float(b0):f})")
     parser.add_argument("--c", type=str, default=c0, dest="c",
-                        help="Value for c0; should be in [0,1] (default: %f)"%float(c0))
+                help=f"Value for c0; should be in [0,1] (default: {float(c0):f})")
     parser.add_argument("--prec", type=int, default=ctx.prec, dest="prec",
-                        help="Working precision in bits (default: %d)"%ctx.prec)
-    parser.add_argument("--filename", type=str, default="", dest="filename", 
-                        help="Write partition data to a file.")
-    parser.add_argument("--parse-aux", const=True, default=False, action="store_const", dest="parse_aux",
-                        help=SUPPRESS)
+                help=f"Working precision in bits (default: {ctx.prec:d})")
+    parser.add_argument("--filename", type=str, default="", dest="filename",
+                help="Write partition data to a file.")
+    parser.add_argument("--parse-aux", const=True, default=False, action="store_const",
+                dest="parse_aux", help=SUPPRESS)
     args = parser.parse_args()
-    
+
     if args.parse_aux:
-        # Parse auxiliary file and quit
         print("Parsing auxiliary file")
         labels = parse_aux()
         if len(labels) > 0:
-            print("Writing %d labels to file"%len(labels))
+            print(f"Writing {len(labels):d} labels to file")
             write_labels(labels)
         sys.exit()
 
-    #ctx.prec = args.prec
     init_prec(args.prec)
-    print("Working precision: %d"%ctx.prec)
+    print(f"Working precision: {ctx.prec:d}")
     beta = arb(args.beta)
     c = arb(args.c)
-    print("beta0 = %s"%beta)
-    print("c0 = %s"%c)
-    if args.filename: 
+    print(f"beta0 = {beta}")
+    print(f"c0 = {c}")
+    if args.filename:
         if Output.get_instance().open(args.filename):
-            print("Partition data will be written to '%s'"%args.filename)
+            print(f"Partition data will be written to '{args.filename}'")
 
     verify_all(beta, c)
 
-    Output.get_instance().close() 
+    Output.get_instance().close()

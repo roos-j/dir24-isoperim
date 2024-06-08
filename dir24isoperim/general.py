@@ -1,24 +1,8 @@
+# pylint: disable=invalid-name
+
 ''' Some general definitions '''
 
 from flint import arb, ctx
-
-def G1(x, y, B, b):
-    '''Function :math:`G^1_b[B](x,y)`
-
-    Meant to take `arb` or `float` parameters.
-    '''
-    return ((y-x)**(1/b)+B(y)**(1/b))**b + B(x) - 2*B((x+y)/2)
-
-def G2(x, y, B, b):
-    '''Function :math:`G^2_b[B](x,y)`
-    
-    Meant to take `arb` or `float` parameters.
-    '''
-    return y-x + (2**b-1)*B(y) + B(x) - 2*B((x+y)/2)
-
-def G(x, y, B, b):
-    '''Function `G_b[B](x,y)`'''
-    return max(G1(x, y, B, b), G2(x, y, B, b))
 
 def left(i):
     '''Left half of interval.'''
@@ -125,11 +109,11 @@ def part_intvl(g, x, depth=0, maxDepth=12):
 
 def min_val_rect(g, rects):
     '''Return minimum value of g on given partition of rectangles.'''
-    return min([g(*x, *y) for (x,y) in rects]).lower()
+    return min(g(*x, *y) for (x,y) in rects).lower()
 
 def min_val_intvl(g, intvls):
     '''Return minimum value of g on given partition of intervals.'''
-    return min([g(intvls[i], intvls[i+1]) for i in range(len(intvls)-1)]).lower()
+    return min(g(intvls[i], intvls[i+1]) for i in range(len(intvls)-1)).lower()
 
 def tuple_to_arb(x):
     '''Convert interval in tuple format to an arb.'''

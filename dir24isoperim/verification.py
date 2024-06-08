@@ -131,7 +131,7 @@ def verify(v):
     log((FMT_PASS%"ok" if rv else FMT_FAIL%"fail"), indent=0)
     return rv
 
-def verify_positive(g, x, y=None, maxDepth=12, verbose=1, **args):
+def verify_positive(g, x, y=None, maxDepth=12, verbose=1, tag="", **args):
     '''
     Verify that given lower bound function is positive using partitioning on a given rectangle or interval and output result.
     '''
@@ -145,7 +145,7 @@ def verify_positive(g, x, y=None, maxDepth=12, verbose=1, **args):
         success, part = part_intvl(G, x, maxDepth=maxDepth) 
         if success:
             cmt = "%d intervals, min. val = %s"%(len(part)-1, min_val_intvl(G, part))
-            Output.get_instance().write_part(g.__name__, part, cmt)
+            Output.get_instance().write_part(g.__name__+tag, part, cmt)
             if verbose: 
                 log(FMT_PASS%"ok", indent=0)
                 log("   %s"%cmt)
@@ -153,7 +153,7 @@ def verify_positive(g, x, y=None, maxDepth=12, verbose=1, **args):
         success, part = part_rect(G, x, y, maxDepth=maxDepth)
         if success:
             cmt = "%d rectangles, min. val = %s"%(len(part), min_val_rect(G, part))
-            Output.get_instance().write_part(g.__name__, part, cmt)
+            Output.get_instance().write_part(g.__name__+tag, part, cmt)
             if verbose:
                 log(FMT_PASS%"ok", indent=0)
                 log("   %s"%cmt)
@@ -181,7 +181,7 @@ def verify_all(b0=b0, c0=c0):
         warn("b0>%f: running only case J"%float(b1))
     batch_verify("case J", [
         lambda: verify_positive(g_J_1, (arb(1/2), arb(5/8)), (arb(0), arb(3/16)), b=b0, c=arb(1)),
-        lambda: verify_positive(g_J_1, (arb(1/2), arb(5/8)), (arb(0), arb(3/16)), b=arb(.5), c=c0),
+        lambda: verify_positive(g_J_1, (arb(1/2), arb(5/8)), (arb(0), arb(3/16)), tag="h", b=arb(.5), c=c0),
         lambda: verify_positive(g_J_2, (arb(1/2), arb(9/16)), (arb(11/16), arb(1)))
     ])
     if b0 > b1: return
@@ -189,20 +189,20 @@ def verify_all(b0=b0, c0=c0):
         lambda: verify_positive(g_Q_1, (arb(0), arb(1/4)), (arb(1/4), arb(1/2)), b=b0),
         lambda: verify_positive(g_Q_1_y1_4, (arb(1/4), arb(1/2)), b=arb(.5)),
         lambda: verify_positive(g_Q_2, (arb(1/4), arb(1/2)), (arb(1/4), arb(1/2)), b=b0),
-        lambda: verify_positive(g_Q_2, (arb(1/4), arb(1/2)), (arb(1/4), arb(1/2)), b=arb(.5))
+        lambda: verify_positive(g_Q_2, (arb(1/4), arb(1/2)), (arb(1/4), arb(1/2)), tag="h", b=arb(.5))
     ])
     batch_verify("case LJQ", [
         lambda: verify_positive(g_LJQ_1, (arb(1/16), arb(1/4)), (arb(1/2), arb(3/4)), b=b0),
-        lambda: verify_positive(g_LJQ_1, (arb(1/16), arb(1/4)), (arb(1/2), arb(3/4)), b=arb(.5)),
+        lambda: verify_positive(g_LJQ_1, (arb(1/16), arb(1/4)), (arb(1/2), arb(3/4)), tag="h", b=arb(.5)),
         lambda: verify_positive(g_LJQ_2, (arb(1/2), arb(3/4)), (arb(1/2), arb(1)))
     ])
     batch_verify("case QJQ", [
         lambda: verify_positive(g_QJQ, (arb(1/4), arb(1/2)), (arb(1/2), arb(3/4)), b=b1),
-        lambda: verify_positive(g_QJQ, (arb(1/4), arb(1/2)), (arb(1/2), arb(3/4)), b=arb(.5))
+        lambda: verify_positive(g_QJQ, (arb(1/4), arb(1/2)), (arb(1/2), arb(3/4)), tag="h", b=arb(.5))
     ])
     batch_verify("case QJ", [
         lambda: verify_positive(g_QJ_1, (arb(1/4), arb(1/2)), (arb(1/2), arb(5/8)), b=b0, c=arb(1)),
-        lambda: verify_positive(g_QJ_1, (arb(1/4), arb(1/2)), (arb(1/2), arb(5/8)), b=arb(.5), c=c0),
+        lambda: verify_positive(g_QJ_1, (arb(1/4), arb(1/2)), (arb(1/2), arb(5/8)), tag="h", b=arb(.5), c=c0),
         lambda: verify_positive(g_QJ_2, (arb(1/4), arb(1/2)), (arb(5/8), arb(1)))
     ])
     if (b0 > b0P):

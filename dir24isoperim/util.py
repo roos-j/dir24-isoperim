@@ -38,9 +38,11 @@ class Output:
         try:
             self._fh = open(filename, "w")
             self._fh.write(_preamble)
+            return True
         except IOError:
             err("Couldn't write to file '%s'"%filename)
             self._fh = None
+            return False
     
     def write(self, data):
         if self._fh == None: return

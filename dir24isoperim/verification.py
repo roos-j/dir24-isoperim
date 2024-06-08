@@ -119,6 +119,11 @@ def g_P_3(xm: arb, xM: arb, b: arb=b0P) -> arb:
     rv -= 2*b*xM
     return rv
 
+# Auxiliary
+
+def g_JL(xm: arb, xM: arb, b: arb) -> arb:
+    return 2/JM(xm, xM)-b*arb.log(arb(2))**(-b)*(1-xM)**(-1)*(1-b+arb.log(1/(1-xM)))*arb.log(1/(1-xm))**(-2+b)
+
 # Verification
 
 def verify(v):
@@ -212,6 +217,9 @@ def verify_all(b0=b0, c0=c0):
         lambda: verify(g_P_1_at1_32),
         lambda: verify_positive(g_P_2, (arb(1/32), arb(1/4))),
         lambda: verify_positive(g_P_3, (arb(1/4), arb(1/2)))
+    ])
+    batch_verify("Auxiliary", [
+        lambda: verify_positive(g_JL, (arb(1/2), arb(7/8)), b=b0)
     ])
 
 

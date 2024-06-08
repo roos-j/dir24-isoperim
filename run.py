@@ -1,5 +1,6 @@
-from argparse import ArgumentParser
-from dir24isoperim import verify_all, b0, b1, c0, init_prec, Output
+import sys
+from argparse import ArgumentParser, SUPPRESS
+from dir24isoperim import verify_all, b0, b1, c0, init_prec, Output, parse_aux, write_labels
 from flint import arb, ctx
 
 if __name__ == "__main__":
@@ -12,8 +13,19 @@ if __name__ == "__main__":
                         help="Working precision in bits (default: %d)"%ctx.prec)
     parser.add_argument("--filename", type=str, default="", dest="filename", 
                         help="Write partition data to a file.")
+    parser.add_argument("--parse-aux", const=True, default=False, action="store_const", dest="parse_aux",
+                        help=SUPPRESS)
     args = parser.parse_args()
     
+    if args.parse_aux:
+        # Parse auxiliary file and quit
+        print("Parsing auxiliary file")
+        labels = parse_aux()
+        if len(labels) > 0:
+            print("Writing %d labels to file"%len(labels))
+            write_labels(labels)
+        sys.exit()
+
     #ctx.prec = args.prec
     init_prec(args.prec)
     print("Working precision: %d"%ctx.prec)

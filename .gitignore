@@ -5,3 +5,4 @@
 .git
 *_tmp.py
 partitions.py
+*.aux

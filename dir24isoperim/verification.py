@@ -5,6 +5,8 @@ from .general import b0, b1, c0, Jconst, L, Q, DQ, J, DJ, G, alpha0, alpha1, \
 
 from .util import Log, log, FMT_FAIL, FMT_PASS, err, warn, Output
 
+from .labels import lbl_dict
+
 #
 #  Define functions for verification
 # 
@@ -140,15 +142,18 @@ def verify_positive(g, x, y=None, maxDepth=12, verbose=1, tag="", **args):
     '''
     Verify that given lower bound function is positive using partitioning on a given rectangle or interval and output result.
     '''
+    msg = g.__name__
+    if g.__name__ in lbl_dict:
+        msg += " [display (%s)] "%lbl_dict[g.__name__]
+    if len(args) > 0:
+        msg += " with "+", ".join(["%s=%f"%(k,float(v)) for k,v in args.items()])
     if verbose: 
-        msg = g.__name__
-        if len(args) > 0:
-            msg += " with "+", ".join(["%s=%f"%(k,float(v)) for k,v in args.items()])
         log(msg + ": ", end="")
     G = lambda *p: g(*p, **args)
     if y == None: 
         success, part = part_intvl(G, x, maxDepth=maxDepth) 
         if success:
+            Output.get_instance().write_comment(msg)
             cmt = "%d intervals, min. val = %s"%(len(part)-1, min_val_intvl(G, part))
             Output.get_instance().write_part(g.__name__+tag, part, cmt)
             if verbose: 
@@ -157,6 +162,7 @@ def verify_positive(g, x, y=None, maxDepth=12, verbose=1, tag="", **args):
     else: 
         success, part = part_rect(G, x, y, maxDepth=maxDepth)
         if success:
+            Output.get_instance().write_comment(msg)
             cmt = "%d rectangles, min. val = %s"%(len(part), min_val_rect(G, part))
             Output.get_instance().write_part(g.__name__+tag, part, cmt)
             if verbose:

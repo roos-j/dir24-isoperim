@@ -52,8 +52,11 @@ class Output:
             err("Error while writing to file.")
             self._fh = None
 
-    def write_part(self, lbl, part, comment):
+    def write_comment(self, comment):
         self.write("# %s\n"%comment)
+
+    def write_part(self, lbl, part, comment):
+        self.write_comment(comment)
         self.write("%s = %s\n\n"%(lbl, repr(part)))
 
     def close(self):

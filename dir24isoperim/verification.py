@@ -1,3 +1,5 @@
+''' Verification of numerical inequalities '''
+
 from flint import arb
 
 from .general import b0, b1, c0, Jconst, L, Q, DQ, J, DJ, G, alpha0, alpha1, \

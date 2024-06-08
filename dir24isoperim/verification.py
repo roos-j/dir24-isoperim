@@ -1,4 +1,4 @@
-# pylint: disable=too-many-arguments,invalid-name
+# pylint: disable=too-many-arguments,invalid-name,no-name-in-module
 
 ''' Verification of numerical inequalities '''
 

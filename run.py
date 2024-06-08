@@ -1,3 +1,5 @@
+# pylint: disable=no-name-in-module
+
 '''Run this file using 
     python run.py
 '''

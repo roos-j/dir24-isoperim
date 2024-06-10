@@ -1,3 +1,5 @@
+# (c) 2024 Joris Roos <jroos.math@gmail.com>
+
 ''' Utility functions '''
 
 import re

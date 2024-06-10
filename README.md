@@ -23,8 +23,6 @@ This will be most straightforward in a Unix-like environment.
     
     * Follow build instructions here: https://fredrikj.net/python-flint/setup.html
 
-(It is strongly recommended, but not strictly necessary, to do this on Linux.)
-
 3. Clone this repository
 
         git clone https://github.com/roos-j/dir24-isoperim.git

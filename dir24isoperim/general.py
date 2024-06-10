@@ -1,3 +1,4 @@
+# (c) 2024 Joris Roos <jroos.math@gmail.com>
 # pylint: disable=invalid-name,no-name-in-module
 
 ''' Some general definitions '''

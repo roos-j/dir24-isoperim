@@ -43,6 +43,8 @@ _PREAMBLE_FMT = \
 
 '''
 
+_MAX_LINE_LEN = 80
+
 class Output:
     '''Manage output of partition data to file.'''
     _inst = None
@@ -88,13 +90,43 @@ class Output:
     def write_part(self, lbl, part, comment):
         '''Write partition data.'''
         self.write_comment(comment)
-        self.write(f"{lbl} = {repr(part)}\n\n")
+        part_repr = "["
+        first = True
+        line_len = 1
+        for rect in part:
+            if not first:
+                if line_len > _MAX_LINE_LEN:
+                    part_repr += ",\n"+" "*4
+                    line_len = 0
+                else:
+                    part_repr += ", "
+            first = False
+            if isinstance(rect, tuple):
+                rect_repr = f"(({exact_to_str(rect[0][0])}, {exact_to_str(rect[0][1])}), " + \
+                        f"({exact_to_str(rect[1][0])}, {exact_to_str(rect[1][1])}))"
+            else:
+                rect_repr = exact_to_str(rect)
+            line_len += len(rect_repr)
+            part_repr += rect_repr
+        part_repr += "]"
+        self.write(f"{lbl} = {part_repr}\n\n")
 
     def close(self):
         '''Close file.'''
         if not self._fh is None:
             self._fh.close()
             self._fh = None
+
+def exact_to_str(x):
+    '''Convert exact arb to string.'''
+    assert(x.is_exact())
+    num, denom = x.man_exp()
+    denom = 2**-denom
+    if num == 0: 
+        return "\"0\""
+    if denom == 1:
+        return f"\"{num}\""
+    return f"\"{num}/{denom}\""
 
 # Label file generation
 

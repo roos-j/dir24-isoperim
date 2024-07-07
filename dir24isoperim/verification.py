@@ -117,9 +117,9 @@ def g_P_1(x: arb, b: arb=b1) -> arb:
     return 2**(-2*b)*(arb.log(1/x)/arb.log(arb(2)))**.5 \
         +2**(-2*b)*2**arb(.5)*arb(.77)*arb.log(Jconst.w0/x)**.5-2
 
-def g_P_1_at1_32() -> arb:
+def g_P_1_at_val() -> arb:
     '''Poincare'''
-    return g_P_1(arb(1/32)) > 0
+    return g_P_1(arb(1/64)) > 0
 
 b0p = .5+3*2**(-12)
 
@@ -252,12 +252,12 @@ def verify_all(b=b0, c=c0):
         warn(f"beta0>{float(b0p):f}: skipping Poincare")
         return
     batch_verify("Poincare", [
-        lambda: verify(g_P_1_at1_32),
-        lambda: verify_positive(g_P_2, (arb(1/32), arb(1/4))),
+        lambda: verify(g_P_1_at_val),
+        lambda: verify_positive(g_P_2, (arb(1/64), arb(1/4))),
         lambda: verify_positive(g_P_3, (arb(1/4), arb(1/2)))
     ])
     batch_verify("Auxiliary", [
-        lambda: verify_positive(g_JL, (arb(1/2), arb(7/8)), b=b)
+        lambda: verify_positive(g_JL, (arb(1/2), arb(2047/2048)), b=b)
     ])
 
 

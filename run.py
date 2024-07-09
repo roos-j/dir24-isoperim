@@ -3,10 +3,15 @@
 '''Run this file using 
     python run.py
 '''
-
 import sys
+
+try:
+    from flint import arb, ctx
+except ModuleNotFoundError:
+    print("\033[1;91mError:\033[0m python-flint not installed")
+    sys.exit()
+
 from argparse import ArgumentParser, SUPPRESS
-from flint import arb, ctx
 from dir24isoperim import verify_all, b0, b1, c0, init_prec, Output, parse_aux, write_labels
 
 if __name__ == "__main__":

@@ -3,7 +3,9 @@
 
 ''' Some general definitions '''
 
+import sys
 from flint import arb, ctx
+from .util import err
 
 def left(i):
     '''Left half of interval.'''
@@ -188,5 +190,9 @@ def J(x: arb) -> arb:
 def DJ(x: arb) -> arb:
     '''Derivative of J'''
     return arb(2)**.5*PhiInv((1-x)/Jconst.w0)
+
+if not hasattr(arb, "erfinv"):
+    err("version of python-flint too old: erfinv missing")
+    sys.exit()
 
 init_prec()

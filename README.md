@@ -1,70 +1,17 @@
-This repository contains code accompanying the paper ``Sharp isoperimetric inequalities on the Hamming cube near the critical exponent'' by P. Durcik, P. Ivanisvili, J. Roos.
+This repository contains code accompanying the paper *Sharp isoperimetric inequalities on the Hamming cube near the critical exponent* by Polona Durcik, Paata Ivanisvili and Joris Roos.
 
-The code produces provably correct bounds using interval arithmetic. It and the libraries it depends on are open source.
-
+The code produces provably correct bounds using interval/ball arithmetic relying on [FLINT/Arb](https://flintlib.org/doc/arb.html).
 
 Installation
 =============
 
-Instructions for generic platform
-----------------------
-This will be most straightforward in a Unix-like environment.
+1. Install a [Python 3](https://www.python.org/downloads/) distribution (at least 3.9)
 
+2. Install the latest version of [python-flint](https://github.com/flintlib/python-flint). As of this writing, the latest stable release (0.6.0) lacks the inverse error function, but the function is available in recent pre-releases >=0.7.0a1. To install use:
 
-1. Install a Python 3 distribution (at least 3.9)
-
-2. Build and install python-flint. The current latest release (0.6.0) lacks the inverse error function. Thus the library must currently be built from source:
-
-    * Install git: https://git-scm.com/
-
-    * Clone the python-flint repository
-
-          git clone https://github.com/flintlib/python-flint.git
-    
-    * Follow build instructions here: https://fredrikj.net/python-flint/setup.html
+        pip install python-flint>=0.7.0a1
 
 3. Clone this repository
-
-        git clone https://github.com/roos-j/dir24-isoperim.git
-
-
-Specific instructions for Windows (x86-64)
---------------------
-
-1. Install MSYS2 (https://www.msys2.org); it is recommended to use the default directory: `C:\msys64`
-
-2. (Optional) Add the following to PATH environment variable:
-        
-        C:\msys64\; C:\msys64\usr\bin; C:\msys64\ucrt64\bin
-
-3. Install required packages
-
-    * Open UCRT64 shell: type UCRT64 in the Windows search bar or in a command prompt
-    
-    * Shell will open in the default home directory at `C:\msys64\home\[USERNAME]`
-    
-    * To install required packages enter:
-    
-            pacman -S mingw-w64-ucrt-x86_64-gcc
-            pacman -S mingw-w64-ucrt-x86_64-cmake
-            pacman -S mingw-w64-ucrt-x86_64-flint
-            pacman -S mingw-w64-ucrt-x86_64-python
-            pacman -S mingw-w64-ucrt-x86_64-python-pip
-            pacman -S git
-
-    (Packages will be installed to C:\msys64\ucrt64 or C:\msys64\usr)
-    
-4. Build and install python-flint (must be built from source):
-        
-        git clone https://github.com/flintlib/python-flint.git
-        
-        cd python-flint
-
-        pip install .
-        
-        cd ..
-
-5. Clone this repository
 
         git clone https://github.com/roos-j/dir24-isoperim.git
 

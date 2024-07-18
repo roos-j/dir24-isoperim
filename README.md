@@ -1,4 +1,4 @@
-This repository contains code accompanying the paper *Sharp isoperimetric inequalities on the Hamming cube near the critical exponent* by Polona Durcik, Paata Ivanisvili and Joris Roos.
+This repository contains code accompanying the paper *Sharp isoperimetric inequalities on the Hamming cube near the critical exponent* by Polona Durcik, Paata Ivanisvili and Joris Roos, [arXiv:2407.12674](https://arxiv.org/abs/2407.12674).
 
 The code produces provably correct bounds using interval/ball arithmetic relying on [FLINT/Arb](https://flintlib.org/doc/arb.html).
 

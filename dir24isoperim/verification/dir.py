@@ -1,20 +1,37 @@
 # (c) 2024 Joris Roos <jroos.math@gmail.com>
 # pylint: disable=too-many-arguments,invalid-name,no-name-in-module
 
-''' Verification of numerical inequalities '''
+''' Verification of numerical inequalities in DIR24 '''
 
-from flint import arb
+from flint import arb, ctx
 
-from .general import b0, b1, c0, Jconst, L, Q, DQ, J, DJ, alpha0, alpha1, \
-                    part_rect, part_intvl, min_val_intvl, min_val_rect
+from ..general import b0, b1, c0, Jconst, L, Q, DQ, bobkovI, PhiInv, alpha0, alpha1, \
+                    wtox, find_root, batch_verify, verify, verify_positive
 
-from .util import Log, log, FMT_FAIL, FMT_PASS, err, warn, Output
+from ..util import Log, log, FMT_FAIL, FMT_PASS, err, warn, Output
 
-from .labels import lbl_dict
 
 #
 #  Define functions for verification
 #
+
+def init_prec(prec = 53):
+    '''Set precision in `flint.ctx` and initialize `w0, x0`'''
+    ctx.prec = prec
+    Jconst.w0 = find_root(lambda w: Jw(arb(.5), w)-.5, (arb(.75), arb(1)))
+    Jconst.x0 = wtox(Jconst.w0)
+
+def Jw(x: arb, w: arb) -> arb:
+    '''Rescaled Gaussian isoperimetric profile'''
+    return arb(2)**.5*arb(w)*bobkovI((1-arb(x))/arb(w))
+
+def J(x: arb) -> arb:
+    '''Specific rescaling that we use'''
+    return Jw(x, Jconst.w0)
+
+def DJ(x: arb) -> arb:
+    '''Derivative of J'''
+    return arb(2)**.5*PhiInv((1-x)/Jconst.w0)
 
 def Jm(xm: arb, xM: arb) -> arb:
     '''Lower bound for J'''
@@ -145,65 +162,7 @@ def g_JL(xm: arb, xM: arb, b: arb) -> arb:
     return 2/JM(xm, xM)-b*arb.log(arb(2))**(-b)*(1-xM)**(-1)*(1-b+arb.log(1/(1-xM))) \
             *arb.log(1/(1-xm))**(-2+b)
 
-# Verification
 
-def verify(v):
-    '''
-    Call a generic verification routine (expected to return a boolean) and log result.
-    Return result of verification.
-    '''
-    log(v.__name__ + ": ", end="")
-    rv = v()
-    log((FMT_PASS%"ok" if rv else FMT_FAIL%"fail"), indent=0)
-    return rv
-
-def verify_positive(g, x, y=None, maxDepth=12, verbose=1, tag="", **args):
-    '''
-    Verify that given lower bound function is positive using partitioning 
-    on a given rectangle or interval and output result.
-    '''
-    msg = g.__name__
-    if g.__name__ in lbl_dict:
-        msg += f" [display ({lbl_dict[g.__name__]})] "
-    if len(args) > 0:
-        msg += " with "+", ".join([f"{k}={float(v)}" for k,v in args.items()])
-    if verbose:
-        log(msg + ": ", end="")
-
-    def G(*p):
-        return g(*p, **args)
-
-    if y is None:
-        success, part = part_intvl(G, x, maxDepth=maxDepth)
-        if success:
-            Output.get_instance().write_comment(msg)
-            cmt = f"{len(part)-1:d} intervals, min. val = {min_val_intvl(G, part)}"
-            Output.get_instance().write_part(g.__name__+tag, part, cmt)
-            if verbose:
-                log(FMT_PASS%"ok", indent=0)
-                log(f"   {cmt}")
-    else:
-        success, part = part_rect(G, x, y, maxDepth=maxDepth)
-        if success:
-            Output.get_instance().write_comment(msg)
-            cmt = f"{len(part):d} rectangles, min. val = {min_val_rect(G, part)}"
-            Output.get_instance().write_part(g.__name__+tag, part, cmt)
-            if verbose:
-                log(FMT_PASS%"ok", indent=0)
-                log(f"   {cmt}")
-    if not success and verbose:
-        log(FMT_FAIL%"fail", indent=0)
-        log(f"   at {part}")
-    return success, part
-
-def batch_verify(label, methods, verbose=1):
-    '''Run a list of verification methods.'''
-    if verbose:
-        log(label)
-    Log.lvl = 1
-    for m in methods:
-        m()
-    Log.lvl = 0
 
 def verify_all(b=b0, c=c0):
     '''Verify all claims in the paper.'''
@@ -260,6 +219,3 @@ def verify_all(b=b0, c=c0):
         lambda: verify_positive(g_JL, (arb(1/2), arb(2047/2048)), b=b)
     ])
 
-
-if __name__ == '__main__':
-    verify_all()

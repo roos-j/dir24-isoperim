@@ -12,7 +12,7 @@ except ModuleNotFoundError:
     sys.exit()
 
 from argparse import ArgumentParser, SUPPRESS
-from dir24isoperim import verify_all, b0, b1, c0, init_prec, Output, parse_aux, write_labels
+from dir24isoperim import verify_dir, b0, b1, c0, init_prec, Output, parse_aux, write_labels
 
 if __name__ == "__main__":
     parser = ArgumentParser(description="Verify estimates in DIR24.")
@@ -46,6 +46,6 @@ if __name__ == "__main__":
         if Output.get_instance().open(args.filename):
             print(f"Partition data will be written to '{args.filename}'")
 
-    verify_all(beta, c)
+    verify_dir(beta, c)
 
     Output.get_instance().close()

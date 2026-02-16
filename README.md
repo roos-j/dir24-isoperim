@@ -7,9 +7,9 @@ Installation
 
 1. Install a [Python 3](https://www.python.org/downloads/) distribution (at least 3.9).
 
-2. Install the latest version of [python-flint](https://github.com/flintlib/python-flint). As of this writing, the latest stable release (0.6.0) lacks the inverse error function, but the function is available in recent pre-releases >=0.7.0a1. To install use:
+2. Install the latest version of [python-flint](https://github.com/flintlib/python-flint) (at least 0.7.0).
 
-        pip install python-flint>=0.7.0a1
+        pip install python-flint
 
 3. Install [Git](https://git-scm.com/downloads).
 

@@ -113,7 +113,7 @@ def g_LJQ_2(ym: arb, yM: arb, bm: arb, bM: arb) -> arb:
 
 def g_QJQ(xm: arb, xM: arb, ym: arb, yM: arb, b: arb) -> arb:
     '''Case QJQ'''
-    return ym - xM + J(ym)*DJ(ym) - (2*Q((xm+yM)/2, b) - Q(xm, b))*DQ((xm+ym)/2, b)
+    return ym - xM + J(yM)*DJ(yM) - (2*Q((xm+yM)/2, b) - Q(xm, b))*DQ((xm+ym)/2, b)
 
 def g_QJ_1(xm: arb, xM: arb, ym: arb, yM: arb, b: arb, c: arb) -> arb:
     '''Case QJ'''
@@ -166,7 +166,7 @@ def g_JL(xm: arb, xM: arb, b: arb) -> arb:
 
 def verify_all(b=b0, c=c0):
     '''Verify all claims in the paper.'''
-    Output.get_instance().write(f"# Partition data for beta0={repr(b)}, c0={repr(c)}\n\n")
+    Output.get_instance().write(f"# Partition data for DIR24, beta0={repr(b)}, c0={repr(c)}\n\n")
     if not arb(.5) <= b <= 1:
         err("beta0 must lie in [0.5, 1]")
         return

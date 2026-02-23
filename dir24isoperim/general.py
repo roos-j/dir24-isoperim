@@ -135,13 +135,13 @@ b0 = arb(.50057) # 0.5+arb("37/65536")
 b1 = 0.5+arb("31/1024")
 c0 = arb("0.997") # 1.-arb("3/1024")
 
-def L(x: arb, b: arb) -> arb:
+def L(x: arb, b: arb = arb(.5)) -> arb:
     '''Logarithmic function :math:`L_b(x)`'''
     if x == arb(0):
         return arb(0)
     return x*(arb.log(1/x)/arb.log(arb(2)))**b
 
-def Q(x: arb, b: arb) -> arb:
+def Q(x: arb, b: arb = arb(.5)) -> arb:
     '''Cubic function :math:`Q_b(x)`'''
     return 2*x/3*(1-x)*(2**(2+b)-3 + (12-2**(3+b))*x)
 
@@ -153,7 +153,7 @@ def alpha1(b: arb) -> arb:
     '''Constant alpha1'''
     return 3-2**(1+b)
 
-def DQ(x: arb, b: arb) -> arb:
+def DQ(x: arb, b: arb = arb(.5)) -> arb:
     '''Derivative of cubic function'''
     return (-3+2**(2+b))*2/3 - 4*alpha0(b)*x - 8*alpha1(b)*x**2
 

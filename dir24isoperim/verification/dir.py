@@ -8,7 +8,7 @@ from flint import arb, ctx
 from ..general import b0, b1, c0, Jconst, L, Q, DQ, bobkovI, PhiInv, alpha0, alpha1, \
                     wtox, find_root, batch_verify, verify, verify_positive
 
-from ..util import Log, log, FMT_FAIL, FMT_PASS, err, warn, Output
+from ..util import err, warn, Output
 
 
 #
@@ -118,7 +118,7 @@ def g_QJQ(xm: arb, xM: arb, ym: arb, yM: arb, b: arb) -> arb:
 def g_QJ_1(xm: arb, xM: arb, ym: arb, yM: arb, b: arb, c: arb) -> arb:
     '''Case QJ'''
     rv = (ym-xM)**(1/b-1)
-    if xM < Jconst.x0:
+    if (xM+yM)/2 < Jconst.x0:
         rv += c**(1/b)*(2*Jm((xm+ym)/2, (xM+yM)/2)-Q(xM,b))**(1/b-1)*DJ((xM+yM)/2)
     else:
         rv -= c**(1/b)*(2*JM((xm+ym)/2, (xM+yM)/2)-Q(xm,b))**(1/b-1)*absDJM((xm+ym)/2, (xM+yM)/2)

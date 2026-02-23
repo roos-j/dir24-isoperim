@@ -6,3 +6,7 @@
 *_tmp.py
 partitions.py
 *.aux
+labels_dir24_v1.py
+*.txt
+main.*
+partitions*

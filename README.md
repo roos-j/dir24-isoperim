@@ -1,4 +1,4 @@
-This repository contains code accompanying the paper *Sharp isoperimetric inequalities on the Hamming cube near the critical exponent* by Polona Durcik, Paata Ivanisvili and Joris Roos, [arXiv:2407.12674](https://arxiv.org/abs/2407.12674).
+This repository contains code verifying numerical claims in the papers [arXiv:2407.12674](https://arxiv.org/abs/2407.12674) and DIRX26.
 
 The code produces provably correct bounds using interval/ball arithmetic relying on [FLINT/Arb](https://flintlib.org/doc/arb.html).
 
@@ -20,9 +20,9 @@ Installation
 Usage
 =======
 
-To verify all computer-assisted claims in the paper use
+To verify all computer-assisted claims in the papers use
 
-    python run.py --beta 0.50057 --c 0.997
+    python run.py
 
 To save partition data to file use
 

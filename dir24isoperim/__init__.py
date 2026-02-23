@@ -1,6 +1,7 @@
 ''' DIR24 Isoperimetric '''
 
 from .general import *
+from .verification.dirx import verify_all as verify_dirx
 from .verification.dir import verify_all as verify_dir
 from .verification.dir import init_prec
 from .util import *

@@ -12,10 +12,12 @@ except ModuleNotFoundError:
     sys.exit()
 
 from argparse import ArgumentParser, SUPPRESS
-from dir24isoperim import verify_dir, b0, b1, c0, init_prec, Output, parse_aux, write_labels
+from dir24isoperim import verify_dir, verify_dirx, b0, b1, c0, init_prec, Output, parse_aux, write_labels
 
 if __name__ == "__main__":
-    parser = ArgumentParser(description="Verify estimates in DIR24.")
+    parser = ArgumentParser(description="Verify estimates in DIR24, DIRX26.")
+    parser.add_argument("--skip-dir", const=False, default=True, action="store_const", dest="dir", help="Skip verification of DIR24")
+    parser.add_argument("--skip-dirx", const=False, default=True, action="store_const", dest="dirx", help="Skip verification of DIRX26")
     parser.add_argument("--beta", type=str, default=b0, dest="beta",
                 help=f"Value for beta0; should be in [0.5, {float(b1):f}] (default: {float(b0):f})")
     parser.add_argument("--c", type=str, default=c0, dest="c",
@@ -40,12 +42,18 @@ if __name__ == "__main__":
     print(f"Working precision: {ctx.prec:d}")
     beta = arb(args.beta)
     c = arb(args.c)
-    print(f"beta0 = {beta}")
-    print(f"c0 = {c}")
+    if args.dir:
+        print(f"beta0 = {beta}")
+        print(f"c0 = {c}")
     if args.filename:
         if Output.get_instance().open(args.filename):
             print(f"Partition data will be written to '{args.filename}'")
 
-    verify_dir(beta, c)
+    if args.dir:
+        print("="*32 + "\n" + "Verifying DIR24\n" + "="*32 + "\n")
+        verify_dir(beta, c)
+    if args.dirx:
+        print("="*32 + "\n" + "Verifying DIRX26\n" + "="*32 + "\n")
+        verify_dirx()
 
     Output.get_instance().close()

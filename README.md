@@ -1,4 +1,4 @@
-This repository contains code verifying numerical claims in the papers [arXiv:2407.12674](https://arxiv.org/abs/2407.12674) and DIRX26.
+This repository contains code verifying numerical claims in the papers [arXiv:2407.12674](https://arxiv.org/abs/2407.12674) and [arXiv:2602.20462](https://arxiv.org/abs/2602.20462).
 
 The code produces provably correct bounds using interval/ball arithmetic relying on [FLINT/Arb](https://flintlib.org/doc/arb.html).
 

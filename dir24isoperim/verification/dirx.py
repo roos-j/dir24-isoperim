@@ -27,7 +27,7 @@ def DJ(x: arb) -> arb:
     return .5*1/Jconst.w1*1/bobkovI(1/(2*Jconst.w1))*PhiInv((1-x)/Jconst.w1)
 
 def gamma() -> arb:
-    '''Value of $\gamma_w$ for $w=w_1$'''
+    '''Value of gamma for w=w_1'''
     return 1/(4*Jconst.w1**2*bobkovI(1/(2*Jconst.w1))**2)
 
 def Jm(xm: arb, xM: arb) -> arb:
